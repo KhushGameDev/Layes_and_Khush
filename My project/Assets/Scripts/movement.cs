@@ -1,19 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
-public class movement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public float moveSpeed, jumpForce;
+
+    public float speed;
+    public float jump;
+    public LayerMask layerForJumping;
+    public bool IsGrounded;
+    public GameObject groundCheckPosition;
+    Rigidbody2D rb;
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        float xInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(xInput * moveSpeed, 0f);
+        float x = Input.GetAxis("Horizontal");
+        Collider2D[] collider = Physics2D.OverlapCircleAll(groundCheckPosition.transform.position, 0.01f, layerForJumping);
+        if (collider.Length > 0)
+        {
+            IsGrounded = true;
+        }
+        else
+        {
+            IsGrounded = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (IsGrounded)
+            {
+                rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            }   
+        }
+        rb.velocity = new Vector3(x * speed, rb.velocity.y, 0);
+
     }
 }
