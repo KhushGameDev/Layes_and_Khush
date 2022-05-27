@@ -1,13 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class Movement : MonoBehaviour
+public class movement : MonoBehaviour
 {
 
     public float speed;
-    public float jump;
+    public float jumpForce;
+    private int jumps;
+    public int JumpAmount;
     public LayerMask layerForJumping;
-    public bool IsGrounded;
+    public bool isGrounded;
     public GameObject groundCheckPosition;
     Rigidbody2D rb;
 
@@ -22,18 +24,20 @@ public class Movement : MonoBehaviour
         Collider2D[] collider = Physics2D.OverlapCircleAll(groundCheckPosition.transform.position, 0.01f, layerForJumping);
         if (collider.Length > 0)
         {
-            IsGrounded = true;
+            isGrounded = true;
         }
         else
         {
-            IsGrounded = false;
+            isGrounded = false;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded)
         {
-            if (IsGrounded)
-            {
-                rb.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-            }   
+            jumps = JumpAmount;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && jumps > 0)
+        {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumps--;
         }
         rb.velocity = new Vector3(x * speed, rb.velocity.y, 0);
 
