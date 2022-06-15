@@ -7,17 +7,30 @@ public class PlayerMovement : MonoBehaviour
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
+    private bool doubleJump;
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Animator animator;
 
-    void Update()
+    private void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (IsGrounded() && !Input.GetButton("Jump"))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            doubleJump = false;
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (IsGrounded() || doubleJump)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+
+                doubleJump = !doubleJump;
+            }
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
@@ -42,10 +55,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
-            isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
+            isFacingRight = !isFacingRight;
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+
+        animator.SetFloat("Speed", Mathf.Abs(horizontal));
     }
 }
