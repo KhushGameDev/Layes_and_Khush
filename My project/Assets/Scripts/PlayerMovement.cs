@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private TrailRenderer tr;
     [SerializeField] private Animator animator;
 
+
     private void Update()
     {
         if (isDashing)
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded())
         {
             coyoteTimeCounter = coyoteTime;
+            animator.SetBool("IsJumping", false);
         }
         else
         {
@@ -56,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetButtonDown("Jump"))
         {
+            
             if (IsGrounded() || doubleJump)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
@@ -63,7 +66,31 @@ public class PlayerMovement : MonoBehaviour
                 doubleJump = !doubleJump;
             }
         }
-
+        if(rb.velocity.y < 0)
+        {
+            animator.SetBool("IsFalling", true);
+        }
+        if(rb.velocity.y == 0)
+        {
+            animator.SetBool("IsFalling", false);
+            animator.SetBool("IsJumping", false);
+        }
+        if(rb.velocity.y > 0)
+        {
+            animator.SetBool("IsJumping", true);
+        }
+        if(rb.velocity.x > 0)
+        {
+            animator.SetBool("IsRunning", true);
+        }
+        if(rb.velocity.x < 0)
+        {
+            animator.SetBool("IsRunning", true);
+        }
+        if(rb.velocity.x == 0)
+        {
+            animator.SetBool("IsRunning", false);
+        }
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
