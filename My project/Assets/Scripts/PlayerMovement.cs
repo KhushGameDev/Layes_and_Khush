@@ -5,7 +5,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private bool isFacingRight = true;
     public float coyoteTime = 0.2f;
-    private bool doubleJump;
     public float coyoteTimeCounter;
     public float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
@@ -33,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded())
         {
             coyoteTimeCounter = coyoteTime;
-            animator.SetBool("IsJumping", false);
+            
         }
         else
         {
@@ -54,43 +53,20 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             jumpBufferCounter = 0;
-            doubleJump = false;
+
         }
         if (Input.GetButtonDown("Jump"))
         {
             
-            if (IsGrounded() || doubleJump)
+            if (IsGrounded())
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
                 coyoteTimeCounter = 0;
-                doubleJump = !doubleJump;
+
             }
         }
-        if(rb.velocity.y < 0)
-        {
-            animator.SetBool("IsFalling", true);
-        }
-        if(rb.velocity.y == 0)
-        {
-            animator.SetBool("IsFalling", false);
-            animator.SetBool("IsJumping", false);
-        }
-        if(rb.velocity.y > 0)
-        {
-            animator.SetBool("IsJumping", true);
-        }
-        if(rb.velocity.x > 0)
-        {
-            animator.SetBool("IsRunning", true);
-        }
-        if(rb.velocity.x < 0)
-        {
-            animator.SetBool("IsRunning", true);
-        }
-        if(rb.velocity.x == 0)
-        {
-            animator.SetBool("IsRunning", false);
-        }
+       
+       
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
