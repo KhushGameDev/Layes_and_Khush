@@ -8,11 +8,11 @@ public class PlayerMovement : MonoBehaviour
     public float coyoteTimeCounter;
     public float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
-    private float jumpingPower = 16f;
-    private float speed = 8f;
+    private float jumpingPower = 23f;
+    private float speed = 10.0f;
     private bool canDash = true;
     public bool isDashing;
-    private float dashingPower = 30f;
+    private float dashingPower = 35f;
     private float dashingTime = 0.25f;
     private float dashingCooldown = 0.2f;
     private float horizontal;
